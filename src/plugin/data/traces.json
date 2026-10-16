@@ -1,0 +1,916 @@
+{
+ "description": "LangChain-style run traces of a retrieval-augmented code-explanation agent; times in ms from the trace start; prices in USD per million tokens.",
+ "traces": [
+  {
+   "trace_id": "trace-01-simple",
+   "description": "One retrieval-augmented explanation: retrieve, prompt, LLM, parse.",
+   "prices": [
+    {
+     "model": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+     "input_per_million": 0.5,
+     "output_per_million": 1.5
+    },
+    {
+     "model": "Qwen/Qwen2.5-Coder-7B-Instruct",
+     "input_per_million": 3.0,
+     "output_per_million": 15.0
+    }
+   ],
+   "runs": [
+    {
+     "id": "run-01",
+     "parent_id": "run-04",
+     "name": "lsh_retrieve",
+     "run_type": "retriever",
+     "start_ms": 1,
+     "end_ms": 5,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-02",
+     "parent_id": "run-04",
+     "name": "StrOutputParser",
+     "run_type": "parser",
+     "start_ms": 3632,
+     "end_ms": 3633,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-03",
+     "parent_id": "run-04",
+     "name": "ChatHuggingFace",
+     "run_type": "llm",
+     "start_ms": 9,
+     "end_ms": 3631,
+     "status": "success",
+     "error": "",
+     "model": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+     "prompt_tokens": 647,
+     "completion_tokens": 387
+    },
+    {
+     "id": "run-04",
+     "parent_id": null,
+     "name": "CodeExplainerAgent",
+     "run_type": "chain",
+     "start_ms": 0,
+     "end_ms": 3633,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-05",
+     "parent_id": "run-04",
+     "name": "ChatPromptTemplate",
+     "run_type": "prompt",
+     "start_ms": 6,
+     "end_ms": 8,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    }
+   ]
+  },
+  {
+   "trace_id": "trace-02-retry",
+   "description": "The first LLM call times out and is retried after a back-off.",
+   "prices": [
+    {
+     "model": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+     "input_per_million": 0.5,
+     "output_per_million": 1.5
+    },
+    {
+     "model": "Qwen/Qwen2.5-Coder-7B-Instruct",
+     "input_per_million": 3.0,
+     "output_per_million": 15.0
+    }
+   ],
+   "runs": [
+    {
+     "id": "run-01",
+     "parent_id": "run-04",
+     "name": "ChatHuggingFace",
+     "run_type": "llm",
+     "start_ms": 11,
+     "end_ms": 1281,
+     "status": "error",
+     "error": "TimeoutError: inference endpoint did not answer",
+     "model": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+     "prompt_tokens": 834,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-02",
+     "parent_id": "run-04",
+     "name": "ChatPromptTemplate",
+     "run_type": "prompt",
+     "start_ms": 8,
+     "end_ms": 10,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-03",
+     "parent_id": "run-04",
+     "name": "StrOutputParser",
+     "run_type": "parser",
+     "start_ms": 5346,
+     "end_ms": 5347,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-04",
+     "parent_id": null,
+     "name": "CodeExplainerAgent",
+     "run_type": "chain",
+     "start_ms": 0,
+     "end_ms": 5348,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-05",
+     "parent_id": "run-04",
+     "name": "lsh_retrieve",
+     "run_type": "retriever",
+     "start_ms": 1,
+     "end_ms": 7,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-06",
+     "parent_id": "run-04",
+     "name": "ChatHuggingFace",
+     "run_type": "llm",
+     "start_ms": 1818,
+     "end_ms": 5345,
+     "status": "success",
+     "error": "",
+     "model": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+     "prompt_tokens": 492,
+     "completion_tokens": 356
+    }
+   ]
+  },
+  {
+   "trace_id": "trace-03-tool-agent",
+   "description": "Tool-calling mode: the model asks for similar examples, then answers.",
+   "prices": [
+    {
+     "model": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+     "input_per_million": 0.5,
+     "output_per_million": 1.5
+    },
+    {
+     "model": "Qwen/Qwen2.5-Coder-7B-Instruct",
+     "input_per_million": 3.0,
+     "output_per_million": 15.0
+    }
+   ],
+   "runs": [
+    {
+     "id": "run-01",
+     "parent_id": "run-03",
+     "name": "search_similar_examples",
+     "run_type": "tool",
+     "start_ms": 2613,
+     "end_ms": 2623,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-02",
+     "parent_id": "run-03",
+     "name": "StrOutputParser",
+     "run_type": "parser",
+     "start_ms": 6740,
+     "end_ms": 6741,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-03",
+     "parent_id": null,
+     "name": "CodeExplainerAgent[tool]",
+     "run_type": "chain",
+     "start_ms": 0,
+     "end_ms": 6741,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-04",
+     "parent_id": "run-03",
+     "name": "ChatHuggingFace",
+     "run_type": "llm",
+     "start_ms": 2625,
+     "end_ms": 6739,
+     "status": "success",
+     "error": "",
+     "model": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+     "prompt_tokens": 1024,
+     "completion_tokens": 397
+    },
+    {
+     "id": "run-05",
+     "parent_id": "run-01",
+     "name": "lsh_retrieve",
+     "run_type": "retriever",
+     "start_ms": 2614,
+     "end_ms": 2619,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-06",
+     "parent_id": "run-03",
+     "name": "ChatHuggingFace",
+     "run_type": "llm",
+     "start_ms": 2,
+     "end_ms": 2612,
+     "status": "success",
+     "error": "",
+     "model": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+     "prompt_tokens": 883,
+     "completion_tokens": 273
+    },
+    {
+     "id": "run-07",
+     "parent_id": "run-01",
+     "name": "format_examples",
+     "run_type": "chain",
+     "start_ms": 2620,
+     "end_ms": 2622,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    }
+   ]
+  },
+  {
+   "trace_id": "trace-04-parallel",
+   "description": "Two retrievers run in parallel before one LLM call.",
+   "prices": [
+    {
+     "model": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+     "input_per_million": 0.5,
+     "output_per_million": 1.5
+    },
+    {
+     "model": "Qwen/Qwen2.5-Coder-7B-Instruct",
+     "input_per_million": 3.0,
+     "output_per_million": 15.0
+    }
+   ],
+   "runs": [
+    {
+     "id": "run-01",
+     "parent_id": "run-03",
+     "name": "ChatHuggingFace",
+     "run_type": "llm",
+     "start_ms": 25,
+     "end_ms": 1261,
+     "status": "success",
+     "error": "",
+     "model": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+     "prompt_tokens": 672,
+     "completion_tokens": 255
+    },
+    {
+     "id": "run-02",
+     "parent_id": "run-05",
+     "name": "full_scan_retrieve",
+     "run_type": "retriever",
+     "start_ms": 2,
+     "end_ms": 20,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-03",
+     "parent_id": null,
+     "name": "CompareRetrievers",
+     "run_type": "chain",
+     "start_ms": 0,
+     "end_ms": 1262,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-04",
+     "parent_id": "run-05",
+     "name": "lsh_retrieve",
+     "run_type": "retriever",
+     "start_ms": 2,
+     "end_ms": 5,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-05",
+     "parent_id": "run-03",
+     "name": "RunnableParallel<lsh,full_scan>",
+     "run_type": "chain",
+     "start_ms": 1,
+     "end_ms": 21,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-06",
+     "parent_id": "run-03",
+     "name": "StrOutputParser",
+     "run_type": "parser",
+     "start_ms": 1262,
+     "end_ms": 1262,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-07",
+     "parent_id": "run-03",
+     "name": "ChatPromptTemplate",
+     "run_type": "prompt",
+     "start_ms": 22,
+     "end_ms": 24,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    }
+   ]
+  },
+  {
+   "trace_id": "trace-05-judge",
+   "description": "An explanation, then a second model grades it (two models, two prices).",
+   "prices": [
+    {
+     "model": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+     "input_per_million": 0.5,
+     "output_per_million": 1.5
+    },
+    {
+     "model": "Qwen/Qwen2.5-Coder-7B-Instruct",
+     "input_per_million": 3.0,
+     "output_per_million": 15.0
+    }
+   ],
+   "runs": [
+    {
+     "id": "run-01",
+     "parent_id": "run-08",
+     "name": "JsonOutputParser",
+     "run_type": "parser",
+     "start_ms": 4700,
+     "end_ms": 4701,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-02",
+     "parent_id": null,
+     "name": "ExplainAndGrade",
+     "run_type": "chain",
+     "start_ms": 0,
+     "end_ms": 4704,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-03",
+     "parent_id": "run-10",
+     "name": "ChatHuggingFace",
+     "run_type": "llm",
+     "start_ms": 9,
+     "end_ms": 1076,
+     "status": "success",
+     "error": "",
+     "model": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+     "prompt_tokens": 803,
+     "completion_tokens": 286
+    },
+    {
+     "id": "run-04",
+     "parent_id": "run-10",
+     "name": "StrOutputParser",
+     "run_type": "parser",
+     "start_ms": 1077,
+     "end_ms": 1077,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-05",
+     "parent_id": "run-08",
+     "name": "ChatPromptTemplate",
+     "run_type": "prompt",
+     "start_ms": 1080,
+     "end_ms": 1081,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-06",
+     "parent_id": "run-10",
+     "name": "lsh_retrieve",
+     "run_type": "retriever",
+     "start_ms": 2,
+     "end_ms": 7,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-07",
+     "parent_id": "run-08",
+     "name": "ChatHuggingFace",
+     "run_type": "llm",
+     "start_ms": 1082,
+     "end_ms": 4699,
+     "status": "success",
+     "error": "",
+     "model": "Qwen/Qwen2.5-Coder-7B-Instruct",
+     "prompt_tokens": 825,
+     "completion_tokens": 177
+    },
+    {
+     "id": "run-08",
+     "parent_id": "run-02",
+     "name": "JudgeChain",
+     "run_type": "chain",
+     "start_ms": 1079,
+     "end_ms": 4702,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-09",
+     "parent_id": "run-10",
+     "name": "ChatPromptTemplate",
+     "run_type": "prompt",
+     "start_ms": 8,
+     "end_ms": 8,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-10",
+     "parent_id": "run-02",
+     "name": "CodeExplainerAgent",
+     "run_type": "chain",
+     "start_ms": 1,
+     "end_ms": 1078,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    }
+   ]
+  },
+  {
+   "trace_id": "trace-06-failed",
+   "description": "Every LLM call fails; the trace itself ends in error.",
+   "prices": [
+    {
+     "model": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+     "input_per_million": 0.5,
+     "output_per_million": 1.5
+    },
+    {
+     "model": "Qwen/Qwen2.5-Coder-7B-Instruct",
+     "input_per_million": 3.0,
+     "output_per_million": 15.0
+    }
+   ],
+   "runs": [
+    {
+     "id": "run-01",
+     "parent_id": "run-02",
+     "name": "ChatPromptTemplate",
+     "run_type": "prompt",
+     "start_ms": 4,
+     "end_ms": 4,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-02",
+     "parent_id": null,
+     "name": "CodeExplainerAgent",
+     "run_type": "chain",
+     "start_ms": 0,
+     "end_ms": 4416,
+     "status": "error",
+     "error": "RuntimeError: retries exhausted",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-03",
+     "parent_id": "run-02",
+     "name": "ChatHuggingFace",
+     "run_type": "llm",
+     "start_ms": 5,
+     "end_ms": 1394,
+     "status": "error",
+     "error": "HTTPError: 503 Service Unavailable (attempt 1)",
+     "model": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+     "prompt_tokens": 510,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-04",
+     "parent_id": "run-02",
+     "name": "ChatHuggingFace",
+     "run_type": "llm",
+     "start_ms": 3820,
+     "end_ms": 4415,
+     "status": "error",
+     "error": "HTTPError: 503 Service Unavailable (attempt 3)",
+     "model": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+     "prompt_tokens": 859,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-05",
+     "parent_id": "run-02",
+     "name": "lsh_retrieve",
+     "run_type": "retriever",
+     "start_ms": 1,
+     "end_ms": 3,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-06",
+     "parent_id": "run-02",
+     "name": "ChatHuggingFace",
+     "run_type": "llm",
+     "start_ms": 1943,
+     "end_ms": 3138,
+     "status": "error",
+     "error": "HTTPError: 503 Service Unavailable (attempt 2)",
+     "model": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+     "prompt_tokens": 713,
+     "completion_tokens": 0
+    }
+   ]
+  },
+  {
+   "trace_id": "trace-07-nested",
+   "description": "A batch of two explanations nested two chains deep, then a report.",
+   "prices": [
+    {
+     "model": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+     "input_per_million": 0.5,
+     "output_per_million": 1.5
+    },
+    {
+     "model": "Qwen/Qwen2.5-Coder-7B-Instruct",
+     "input_per_million": 3.0,
+     "output_per_million": 15.0
+    }
+   ],
+   "runs": [
+    {
+     "id": "run-01",
+     "parent_id": "run-05",
+     "name": "lsh_retrieve",
+     "run_type": "retriever",
+     "start_ms": 3,
+     "end_ms": 5,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-02",
+     "parent_id": "run-12",
+     "name": "StrOutputParser",
+     "run_type": "parser",
+     "start_ms": 4584,
+     "end_ms": 4585,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-03",
+     "parent_id": "run-12",
+     "name": "lsh_retrieve",
+     "run_type": "retriever",
+     "start_ms": 1646,
+     "end_ms": 1650,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-04",
+     "parent_id": null,
+     "name": "Course pipeline",
+     "run_type": "chain",
+     "start_ms": 0,
+     "end_ms": 4591,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-05",
+     "parent_id": "run-13",
+     "name": "CodeExplainerAgent",
+     "run_type": "chain",
+     "start_ms": 2,
+     "end_ms": 1644,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-06",
+     "parent_id": "run-05",
+     "name": "StrOutputParser",
+     "run_type": "parser",
+     "start_ms": 1643,
+     "end_ms": 1643,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-07",
+     "parent_id": "run-04",
+     "name": "write_report",
+     "run_type": "tool",
+     "start_ms": 4588,
+     "end_ms": 4590,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-08",
+     "parent_id": "run-05",
+     "name": "ChatHuggingFace",
+     "run_type": "llm",
+     "start_ms": 7,
+     "end_ms": 1642,
+     "status": "success",
+     "error": "",
+     "model": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+     "prompt_tokens": 851,
+     "completion_tokens": 248
+    },
+    {
+     "id": "run-09",
+     "parent_id": "run-05",
+     "name": "ChatPromptTemplate",
+     "run_type": "prompt",
+     "start_ms": 6,
+     "end_ms": 6,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-10",
+     "parent_id": "run-12",
+     "name": "ChatHuggingFace",
+     "run_type": "llm",
+     "start_ms": 1653,
+     "end_ms": 4583,
+     "status": "success",
+     "error": "",
+     "model": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+     "prompt_tokens": 861,
+     "completion_tokens": 317
+    },
+    {
+     "id": "run-11",
+     "parent_id": "run-12",
+     "name": "ChatPromptTemplate",
+     "run_type": "prompt",
+     "start_ms": 1651,
+     "end_ms": 1652,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-12",
+     "parent_id": "run-13",
+     "name": "CodeExplainerAgent",
+     "run_type": "chain",
+     "start_ms": 1645,
+     "end_ms": 4586,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-13",
+     "parent_id": "run-04",
+     "name": "ExplainBatch",
+     "run_type": "chain",
+     "start_ms": 1,
+     "end_ms": 4587,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    }
+   ]
+  },
+  {
+   "trace_id": "trace-08-tie",
+   "description": "Two branches and two LLM calls end at the same millisecond (tie rules).",
+   "prices": [
+    {
+     "model": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+     "input_per_million": 0.5,
+     "output_per_million": 1.5
+    },
+    {
+     "model": "Qwen/Qwen2.5-Coder-7B-Instruct",
+     "input_per_million": 3.0,
+     "output_per_million": 15.0
+    }
+   ],
+   "runs": [
+    {
+     "id": "run-01",
+     "parent_id": "run-03",
+     "name": "ExplainA",
+     "run_type": "chain",
+     "start_ms": 1,
+     "end_ms": 2001,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-02",
+     "parent_id": "run-01",
+     "name": "ChatHuggingFace",
+     "run_type": "llm",
+     "start_ms": 2,
+     "end_ms": 2001,
+     "status": "success",
+     "error": "",
+     "model": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+     "prompt_tokens": 500,
+     "completion_tokens": 200
+    },
+    {
+     "id": "run-03",
+     "parent_id": null,
+     "name": "CompareModels",
+     "run_type": "chain",
+     "start_ms": 0,
+     "end_ms": 2003,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    {
+     "id": "run-04",
+     "parent_id": "run-05",
+     "name": "ChatHuggingFace",
+     "run_type": "llm",
+     "start_ms": 2,
+     "end_ms": 2001,
+     "status": "success",
+     "error": "",
+     "model": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+     "prompt_tokens": 500,
+     "completion_tokens": 200
+    },
+    {
+     "id": "run-05",
+     "parent_id": "run-03",
+     "name": "ExplainB",
+     "run_type": "chain",
+     "start_ms": 1,
+     "end_ms": 2001,
+     "status": "success",
+     "error": "",
+     "model": "",
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    }
+   ]
+  }
+ ]
+}

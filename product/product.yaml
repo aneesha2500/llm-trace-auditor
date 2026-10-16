@@ -1,0 +1,11 @@
+_ > nanoagent.plugin.manifest.ProductConfig:
+tagline: "Audit an LLM pipeline's run trace, down to the token"
+summary: "Pick a LangChain-style trace of our retrieval-augmented code-explanation agent and the agent rebuilds its run tree to report the end-to-end latency, LLM calls, failures and retries, tokens, cost and critical path. Every answer is checked against an exact computation over the same trace."
+highlights:
+  - "Eight traces: retries, a tool-calling loop, parallel branches, a judge model, a failed run and ties"
+  - "Exact rules for cost, the slowest call and the critical path"
+  - "Each wrong field is listed with the value it should have been"
+steps:
+  - "Ask which traces exist, or name one such as trace-02-retry"
+  - "It reads the runs and rebuilds the tree from their parent ids"
+  - "It reports the audit, and the verdict shows which fields are right"

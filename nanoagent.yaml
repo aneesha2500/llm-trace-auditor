@@ -1,0 +1,46 @@
+_ > nanoagent.plugin.manifest.ManifestConfig:
+id: llm-trace-auditor
+name: LLM Trace Auditor
+version: 0.1.0
+status: ready
+nanoagent: ~=0.5.0
+
+runtime > nanoagent.plugin.manifest.RuntimeConfig:
+  type: mcp_stdio
+  command: [uv, run, --frozen, python, -m, plugin]
+
+permissions > nanoagent.plugin.manifest.PermissionsConfig:
+  network > nanoagent.plugin.manifest.NetworkConfig:
+    hosts: []
+  filesystem > nanoagent.plugin.manifest.FilesystemConfig:
+    write: [workspace]
+
+# One entry per contract.Tool; its input and output classes are contract.TOOLS's.
+tools > dict[contract.Tool, nanoagent.plugin.manifest.ToolConfig]:
+  list_traces:
+    description: List the bundled LangChain run traces (trace id, description, number of runs)
+  get_trace:
+    description: Return one trace's runs (id, parent, type, times, status, model, tokens) and its price table
+  analyze_trace:
+    description: Compute a trace's audit (the audit-trace reference)
+
+# One entry per contract.Task; its input and output classes are contract.TASKS's.
+tasks > dict[contract.Task, nanoagent.plugin.manifest.TaskConfig]:
+  audit-trace:
+    description: Audit a LangChain run trace's latency, LLM calls, failures, tokens, cost and critical path
+    runner: agent
+    tools: [list_traces, get_trace]
+    reference: analyze_trace
+    instructions: |-
+      Call get_trace with the trace_id (list_traces shows the trace ids). The runs form a tree through parent_id; they are listed by id, not in tree order. Work out:
+      - root_run_id: the run whose parent_id is null.
+      - run_count: the number of runs.
+      - total_latency_ms: the root's end_ms minus its start_ms.
+      - llm_calls: the number of runs with run_type llm, failed ones included.
+      - failed_run_ids: the ids of every run (any type) with status error, sorted.
+      - prompt_tokens and completion_tokens: summed over every llm run.
+      - cost_usd: the sum over llm runs of prompt_tokens * input_per_million / 1000000 + completion_tokens * output_per_million / 1000000, using the price of the run's model from the trace's prices, rounded to 6 decimals.
+      - slowest_llm_run_id: the llm run with the largest end_ms - start_ms; on a tie, the smallest id.
+      - critical_path: start at the root and repeatedly step to the child with the largest end_ms (on a tie, the smallest id) until a run with no children; list every id on the way, root first.
+      - max_depth: the largest depth of any run, the root being depth 0 and a child one deeper than its parent.
+      Then submit the trace_id and these values.
