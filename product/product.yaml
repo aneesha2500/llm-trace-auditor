@@ -1,4 +1,4 @@
-_ > nanoagent.plugin.manifest.ProductConfig:
+_ > nanoagent.plugin.v0001.ProductConfig:
 tagline: "Audit an LLM pipeline's run trace, down to the token"
 summary: "Pick a LangChain-style trace of our retrieval-augmented code-explanation agent and the agent rebuilds its run tree to report the end-to-end latency, LLM calls, failures and retries, tokens, cost and critical path. Every answer is checked against an exact computation over the same trace."
 highlights:

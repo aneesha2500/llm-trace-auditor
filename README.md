@@ -81,7 +81,6 @@ any provider's current prices.
 ├── uv.lock
 ├── .gitignore
 ├── .env             # environment variable NAMEs this plugin needs (none)
-├── run.sh           # exits 0 when this environment can run the plugin
 ├── src/plugin/      # the MCP server (__main__.py, IMPLEMENTATIONS), audit.py, tracegen.py, data/
 ├── tests/           # test_verifier.py (correct, wrong, missing, malformed, boundary) and test_audit.py
 ├── ui/              # outputs drawn from their JSON Schema: renderers.js and renderers.css
