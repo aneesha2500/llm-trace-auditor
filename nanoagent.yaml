@@ -1,7 +1,7 @@
 _ > nanoagent.plugin.v0001.ManifestConfig:
 id: llm-trace-auditor
 name: LLM Trace Auditor
-version: 0.1.0
+version: 0.1.1
 status: ready
 spec: nanoagent.plugin/v0001
 
@@ -44,3 +44,4 @@ tasks > dict[contract.Task, nanoagent.plugin.v0001.TaskConfig]:
       - critical_path: start at the root and repeatedly step to the child with the largest end_ms (on a tie, the smallest id) until a run with no children; list every id on the way, root first.
       - max_depth: the largest depth of any run, the root being depth 0 and a child one deeper than its parent.
       Then submit the trace_id and these values.
+      Work out every value yourself, then end by calling the submit tool with them. Never write the answer as a chat message instead: a run that ends without a submit call fails, whatever it wrote.
